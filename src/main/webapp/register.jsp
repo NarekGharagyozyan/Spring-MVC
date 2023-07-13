@@ -129,7 +129,7 @@
               </form>
               <div class="signup">
             <span class="signup">Already have an account?
-             <a href="index.jsp">Login</a>
+             <a href="login.jsp">Login</a>
             </span>
               </div>
           </div>

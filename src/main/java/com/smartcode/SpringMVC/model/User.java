@@ -20,8 +20,12 @@ public class User {
     private String name;
     private String lastname;
     private double balance;
+    @Column(nullable = false, unique = true)
     private String email;
+    @Column(nullable = false)
     private String password;
+    private String code;
+    private boolean isVerified;
     private int age;
 
 }

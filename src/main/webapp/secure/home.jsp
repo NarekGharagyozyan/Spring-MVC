@@ -105,7 +105,7 @@
         <h2>Home Page</h2>
         <h2><%= request.getSession().getAttribute(Parameter.EMAIL_PARAMETER) != null ?
                 "Welcome Dear " + request.getSession().getAttribute(Parameter.EMAIL_PARAMETER) : ""%></h2>
-        <form class="btn_form" method="post" action="/logout">
+        <form class="btn_form" action="/secure/logout">
             <input class="btn" type="submit" value="logout">
         </form>
     </div>
@@ -114,8 +114,8 @@
             request.getAttribute(Parameter.MESSAGE_ATTRIBUTE) : "" %></h3>
 
     <div class="buttons">
-        <a href="/Secure/changePassword.jsp" class="btn" >Change Password</a>
-        <form method="post" action="/deleteAccount">
+        <a href="/secure/changePassword.jsp" class="btn" >Change Password</a>
+        <form method="post" action="/secure/deleteAccount">
             <input class="btn" type="submit" value="deleteAccount">
         </form>
     </div>

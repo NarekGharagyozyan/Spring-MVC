@@ -3,7 +3,9 @@ package com.smartcode.SpringMVC.service.user.impl;
 import com.smartcode.SpringMVC.model.User;
 import com.smartcode.SpringMVC.exceptions.*;
 import com.smartcode.SpringMVC.repository.UserRepository;
+import com.smartcode.SpringMVC.service.email.EmailService;
 import com.smartcode.SpringMVC.service.user.UserService;
+import com.smartcode.SpringMVC.util.codeGenerator.RandomGenerator;
 import com.smartcode.SpringMVC.util.constants.Message;
 import com.smartcode.SpringMVC.util.encoder.MD5Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +21,20 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     @Override
     @Transactional
     public void register(User user) {
-        try {
             validationForRegistration(user);
+            String generatedCode = RandomGenerator.generateNumericString(6);
             user.setPassword(MD5Encoder.encode(user.getPassword()));
-
+            user.setCode(generatedCode);
             userRepository.save(user);
-        } catch (Exception e) {
-            throw new ValidationException(Message.REGISTRATION_IS_FAILED);
-        }
+            emailService.sendSimpleMessage(user.getEmail(),Message.VERIFICATION_CODE_SUBJECT,"Your verification code is: " + generatedCode);
     }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -43,6 +47,12 @@ public class UserServiceImpl implements UserService {
     public void login(String email, String password) {
         validationForLogin(email, password);
         User loginedUser = userRepository.findByEmail(email);
+
+        if (loginedUser == null)
+            throw new UserNotFoundException(Message.USER_NOT_FOUNT);
+        if (!loginedUser.isVerified()){
+            throw new VerificationException(Message.VERIFY_ACCOUNT);
+        }
         if (!loginedUser.getPassword().equals(MD5Encoder.encode(password))) {
             throw new ValidationException(Message.WRONG_EMAIL_OR_PASSWORD);
         }
@@ -76,6 +86,22 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException(Message.USER_NOT_FOUNT);
         }
     }
+
+    @Override
+    @Transactional
+    public void verify(String email, String code) {
+            User user = userRepository.findByEmail(email);
+            if (user == null) {
+                throw new UserNotFoundException(Message.USER_NOT_FOUNT);
+            }
+
+            if (!user.getCode().equals(code)){
+                throw new ValidationException(Message.INCORRECT_CODE);
+            }
+            user.setVerified(true);
+            userRepository.save(user);
+    }
+
 
     private void validationForRegistration(User user) {
         if (user.getEmail() == null ||

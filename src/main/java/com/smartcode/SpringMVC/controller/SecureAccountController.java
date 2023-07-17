@@ -3,7 +3,7 @@ package com.smartcode.SpringMVC.controller;
 import com.smartcode.SpringMVC.service.user.UserService;
 import com.smartcode.SpringMVC.util.constants.Parameter;
 import com.smartcode.SpringMVC.util.constants.Path;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,11 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/secure")
+@RequiredArgsConstructor
 public class SecureAccountController {
-    @Autowired
-    UserService userService;
-    @RequestMapping(value = "/deleteAccount",method = RequestMethod.POST)
+
+    private final UserService userService;
+    @PostMapping(value = "/secure/deleteAccount")
     public ModelAndView deleteAccount(@SessionAttribute(Parameter.EMAIL_PARAMETER) String email) {
 
         try {
@@ -30,7 +30,21 @@ public class SecureAccountController {
         }
     }
 
-    @RequestMapping(value = "/change",method = RequestMethod.POST)
+    @GetMapping(value = "/secure/logout")
+    public String logout(HttpSession session,
+                         HttpServletResponse resp,
+                         @CookieValue(name = Parameter.REMEMBER_COOKIE, required = false) Cookie cookie) {
+
+        session.invalidate();
+
+        if (cookie != null){
+            cookie.setMaxAge(0);
+            resp.addCookie(cookie);
+        }
+        return Path.LOGIN_PATH;
+    }
+
+    @PostMapping(value = "/secure/change")
     public ModelAndView changePassword(@RequestParam String newPassword,
                                        @RequestParam String repeatPassword,
                                        @SessionAttribute(Parameter.EMAIL_PARAMETER) String email) {
@@ -45,17 +59,5 @@ public class SecureAccountController {
         }
     }
 
-    @RequestMapping(value = "/logout",method = RequestMethod.GET)
-    public String logout(HttpSession session,
-                         HttpServletResponse resp,
-                         @CookieValue(name = Parameter.REMEMBER_COOKIE, required = false) Cookie cookie) {
 
-        session.invalidate();
-
-        if (cookie != null){
-            cookie.setMaxAge(0);
-            resp.addCookie(cookie);
-        }
-        return Path.LOGIN_PATH;
-    }
 }

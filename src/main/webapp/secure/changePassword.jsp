@@ -113,7 +113,7 @@
     <div class="container">
         <div class="form_div">
             <header>Change Password</header>
-            <form class="form" method="post" action="/change">
+            <form class="form" method="post" action="/secure/change">
                 <input type="password" placeholder="Enter new password" name="newPassword">
                 <input type="password" placeholder="Repeat password" name="repeatPassword">
                 <input type="submit" class="button" value="Change">

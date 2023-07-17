@@ -1,11 +1,16 @@
 com\smartcode\SpringMVC\exceptions\UserNotFoundException.class
 com\smartcode\SpringMVC\util\CookieUtil.class
-com\smartcode\SpringMVC\controller\TestController.class
 com\smartcode\SpringMVC\util\encoder\MD5Encoder.class
+com\smartcode\SpringMVC\controller\AccountController.class
+com\smartcode\SpringMVC\exceptions\VerificationException.class
 com\smartcode\SpringMVC\model\User.class
+com\smartcode\SpringMVC\controller\SecureAccountController.class
+com\smartcode\SpringMVC\configuration\ApplicationBeanConfiguration.class
 com\smartcode\SpringMVC\util\constants\Parameter.class
 com\smartcode\SpringMVC\exceptions\ProductNotFoundException.class
+com\smartcode\SpringMVC\util\codeGenerator\RandomGenerator.class
 com\smartcode\SpringMVC\util\constants\Message.class
+com\smartcode\SpringMVC\service\email\EmailService.class
 com\smartcode\SpringMVC\model\User$UserBuilder.class
 com\smartcode\SpringMVC\util\encoder\AESManager.class
 com\smartcode\SpringMVC\service\user\impl\UserServiceImpl.class

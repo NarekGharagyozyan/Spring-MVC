@@ -4,6 +4,8 @@ package com.smartcode.SpringMVC.service.user;
 import com.smartcode.SpringMVC.model.User;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface UserService {
 
     void register(User user) ;
@@ -17,4 +19,6 @@ public interface UserService {
     void deleteAccount(String email);
 
     void verify(String email, String code);
+
+    List<User> findAllUsers();
 }

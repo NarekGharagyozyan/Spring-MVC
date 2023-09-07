@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.List;
 import java.util.Optional;
 
 @Service("userService")
@@ -44,6 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void login(String email, String password) {
         validationForLogin(email, password);
         User loginedUser = userRepository.findByEmail(email);
@@ -102,6 +104,11 @@ public class UserServiceImpl implements UserService {
             userRepository.save(user);
     }
 
+    @Override
+    @Transactional
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
 
     private void validationForRegistration(User user) {
         if (user.getEmail() == null ||
